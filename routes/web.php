@@ -5,20 +5,14 @@ use Illuminate\Support\Facades\Route;
 use App\Models\Post;
 use App\Http\Controllers\PostController;
 
+// Route dashboard without login
 Route::get('/', function () {
-    return view('welcome');
-});
-
-// Route::get('/dashboard', function () {
-//     return view('dashboard');
-// })->middleware(['auth', 'verified'])->name('dashboard');
-
-// Route dashboard tanpa login
-Route::get('/dashboard', function () {
     return view('dashboard', [
         'posts' => Post::with('user')->latest()->get(),
     ]);
 })->name('dashboard');
+
+Route::redirect('/dashboard', '/');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -27,6 +21,9 @@ Route::middleware('auth')->group(function () {
 
     // Resource route for posts
     Route::post('/posts', [PostController::class, 'store'])->name('posts.store');
+
+    // Route for my posts
+    Route::get('/my-posts', [PostController::class, 'myPosts'])->name('posts.mine');
 });
 
 require __DIR__ . '/auth.php';

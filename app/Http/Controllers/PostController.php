@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use App\Models\Post;
 
 class PostController extends Controller
 {
@@ -19,7 +20,7 @@ class PostController extends Controller
             'content' => 'required|string',
         ]);
 
-        $post = new \App\Models\Post();
+        $post = new Post();
         $post->name = Auth::user()->name; // Assuming the user is authenticated
         $post->title = $request->input('title');
         $post->content = $request->input('content');
@@ -30,9 +31,10 @@ class PostController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show($id)
+    public function myPosts()
     {
-        // Logic to display a specific post
+        $posts = Post::where('name', Auth::user()->name)->get();
+        return view('my-posts', compact('posts'));
     }
 
     /**
