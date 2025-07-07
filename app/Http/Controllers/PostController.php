@@ -21,6 +21,7 @@ class PostController extends Controller
         ]);
 
         $post = new Post();
+        $post->user_id = Auth::id();
         $post->name = Auth::user()->name; // Assuming the user is authenticated
         $post->title = $request->input('title');
         $post->content = $request->input('content');
@@ -35,6 +36,32 @@ class PostController extends Controller
     {
         $posts = Post::where('name', Auth::user()->name)->get();
         return view('my-posts', compact('posts'));
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function show()
+    {
+        $post = Post::with('user', 'comments.user')->findOrFail(request()->route('post')); // Assuming you have a route parameter named 'post'
+        return view('posts.show', compact('post'));
+    }
+
+    /**
+     * Store a comment for the specified post.
+     */
+    public function storeComment(Request $request, Post $post)
+    {
+        $request->validate([
+            'content' => 'required|string|max:1000',
+        ]);
+
+        $post->comments()->create([
+            'user_id' => Auth::id(),
+            'content' => $request->input('content'),
+        ]);
+
+        return redirect()->route('posts.show', $post->id)->with('success', 'Comment added successfully!');
     }
 
     /**

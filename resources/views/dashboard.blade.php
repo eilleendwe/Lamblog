@@ -26,10 +26,10 @@
                     <p class="text-gray-600">{{ $post->content }}</p>
                     @endif
                     <p class="text-sm text-gray-500 my-2">Posted by {{ $post->user->name }} on {{ $post->created_at->format('F j, Y') }}</p>
-                    <button
-                        class="w-50% bg-blue-500 text-white p-2 rounded hover:bg-blue-600">
+                    <a href="{{ route('posts.show', $post->id) }}"
+                        class="inline-block mt-2 bg-blue-500 text-white p-2 rounded hover:bg-blue-600">
                         See More
-                    </button>
+                    </a>
                 </div>
                 @endforeach
 

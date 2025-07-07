@@ -46,4 +46,12 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    /**
+     * Get the posts for the user.
+     */
+    public function comments()
+    {
+        return $this->hasMany(Comment::class, 'user_id');
+    }
 }

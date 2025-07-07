@@ -24,6 +24,12 @@ Route::middleware('auth')->group(function () {
 
     // Route for my posts
     Route::get('/my-posts', [PostController::class, 'myPosts'])->name('posts.mine');
+
+    // Route to show a single post
+    Route::get('/posts/{post}', [PostController::class, 'show'])->name('posts.show');
+
+    // Route to comment a post
+    Route::post('/posts/{post}/comments', [PostController::class, 'storeComment'])->name('comments.store');
 });
 
 require __DIR__ . '/auth.php';
