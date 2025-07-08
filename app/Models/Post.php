@@ -33,4 +33,20 @@ class Post extends Model
     {
         return $this->hasMany(Comment::class, 'posts_id');
     }
+
+    /**
+     * Get the likes for the post.
+     */
+    public function likes()
+    {
+        return $this->hasMany(Like::class, 'post_id');
+    }
+
+    /**
+     * Get the who liked the post.
+     */
+    public function isLikedBy($user)
+    {
+        return $this->likes()->where('user_id', $user->id)->exists();
+    }
 }

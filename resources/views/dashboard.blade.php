@@ -25,13 +25,18 @@
                     @if ($post->content)
                     <p class="text-gray-600">{{ $post->content }}</p>
                     @endif
-                    <p class="text-sm text-gray-500 my-2">Posted by {{ $post->user->name }} on {{ $post->created_at->format('F j, Y') }}</p>
-                    <a href="{{ route('posts.show', $post->id) }}"
-                        class="inline-block mt-2 bg-blue-500 text-white p-2 rounded hover:bg-blue-600">
-                        See More
+                    <p class="text-sm text-gray-500 my-2">Posted by {{ $post->user->name }} on {{ $post->created_at->format('d/m/Y - H.i') }}</p>
+
+                    <!-- Like Button and show many comments-->
+                    <x-like-button :post="$post" />
+
+                    <!-- Show more button -->
+                    <a href="{{ route('posts.show', $post->id) }}" class="inline-block mt-2 text-blue-500 hover:underline">
+                        Read more →
                     </a>
                 </div>
                 @endforeach
+                {{ $posts->links() }}
 
                 <!-- No Posts Message -->
                 @if ($posts->isEmpty())

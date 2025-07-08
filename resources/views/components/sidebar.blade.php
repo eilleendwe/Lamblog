@@ -15,7 +15,7 @@
 </div>
 <div role="button"
     class="flex items-center text-white w-full p-1 rounded-lg outline-none">
-    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+    <x-nav-link :href="route('posts.trending')" :active="request()->routeIs('posts.trending')">
         {{ __('Trending') }}
     </x-nav-link>
 </div>

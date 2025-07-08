@@ -26,7 +26,7 @@ class PostController extends Controller
         $post->title = $request->input('title');
         $post->content = $request->input('content');
         $post->save();
-        return redirect()->route('dashboard')->with('success', 'Post created successfully!');
+        return redirect()->back()->with('success', 'Post created successfully!');
     }
 
     /**
@@ -63,6 +63,73 @@ class PostController extends Controller
 
         return redirect()->route('posts.show', $post->id)->with('success', 'Comment added successfully!');
     }
+
+    /**
+     * Like a post.
+     */
+    public function likePost(Post $post)
+    {
+        $like = $post->likes()->where('user_id', Auth::id())->first();
+
+        if ($like) {
+            // If the user has already liked the post, remove the like
+            $like->delete();
+            return redirect()->back();
+        } else {
+            // If the user has not liked the post, create a new like
+            $post->likes()->create(['user_id' => Auth::id()]);
+            return redirect()->back();
+        }
+    }
+
+    /**
+     * Unlike a post.
+     */
+    public function unlikePost(Post $post)
+    {
+        $like = $post->likes()->where('user_id', Auth::id())->first();
+
+        if ($like) {
+            // If the user has already liked the post, remove the like
+            $like->delete();
+            return redirect()->back()->with('success', 'Post unliked successfully!');
+        } else {
+            return redirect()->back()->with('error', 'You have not liked this post yet.');
+        }
+    }
+
+    /**
+     * Display a listing of trending posts.
+     */
+    // public function trending()
+    // {
+    //     $trendingPosts = Post::withCount('likes')
+    //         ->orderByDesc('likes_count')
+    //         ->take(5)
+    //         ->get();
+
+    //     return view('posts.trending', compact('trendingPosts'));
+    // }
+
+    public function trendingToday()
+    {
+        $today = now()->startOfDay();
+        $now = now()->endOfDay();
+        $trendingPosts = Post::with(['user'])
+            ->withCount(['likes', 'comments'])
+            ->whereBetween('created_at', [$today, $now])
+            ->get()
+            ->map(function ($post) {
+                // Formula custom: like = 1pt, comment = 2pt
+                $post->trending_score = ($post->likes_count * 1) + ($post->comments_count * 2);
+                return $post;
+            })
+            ->sortByDesc('trending_score')
+            ->take(5);
+
+        return view('posts.trending', compact('trendingPosts'));
+    }
+
 
     /**
      * Show the form for editing the specified resource.

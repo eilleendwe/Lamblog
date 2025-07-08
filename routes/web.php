@@ -8,11 +8,14 @@ use App\Http\Controllers\PostController;
 // Route dashboard without login
 Route::get('/', function () {
     return view('dashboard', [
-        'posts' => Post::with('user')->latest()->get(),
+        'posts' => Post::with('user')->latest()->paginate(5),
     ]);
 })->name('dashboard');
 
 Route::redirect('/dashboard', '/');
+
+//Route for /trending
+Route::get('/trending', [PostController::class, 'trendingToday'])->name('posts.trending');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -30,6 +33,9 @@ Route::middleware('auth')->group(function () {
 
     // Route to comment a post
     Route::post('/posts/{post}/comments', [PostController::class, 'storeComment'])->name('comments.store');
+
+    // Route to like a post
+    Route::post('/posts/{post}/like', [PostController::class, 'likePost'])->name('posts.like');
 });
 
 require __DIR__ . '/auth.php';
