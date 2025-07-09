@@ -9,11 +9,13 @@
             <!-- Sidebar -->
             <x-sidebar />
             <div class="w-[60%] mx-5  sm:px-4 lg:px-8">
-                <h1 class="text-3xl font-bold mb-6 text-white">🔥 TOP 5 POSTS</h1>
+
                 @forelse ($trendingPosts as $post)
                 <div class="bg-white p-4 rounded-lg shadow-md mb-6">
                     <h2 class="text-xl font-semibold">{{ $post->title }}</h2>
-
+                    @if ($post->image)
+                    <img src="{{ asset('storage/' . $post->image) }}" alt="Post Image" class="w-full max-w-md rounded">
+                    @endif
                     <p class="text-gray-600">{{ Str::limit($post->content, 200) }}</p>
 
                     <p class="text-sm text-gray-500 my-2">
@@ -28,7 +30,7 @@
                     </a>
                 </div>
                 @empty
-                <p>No trending posts for today.</p>
+                <h1 class="text-3xl font-bold mb-6 text-white">Nope</h1>
                 @endforelse
             </div>
         </div>

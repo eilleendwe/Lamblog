@@ -13,10 +13,11 @@
     </div>
     @endif
 
-    <form method="POST" action="{{ route('posts.store') }}">
+    <form method="POST" action="{{ route('posts.store') }}" enctype="multipart/form-data">
         @csrf
         <div class="mb-4">
             <label for="title" class="block text-gray-700 mb-2">Title</label>
+
             <input
                 type="text"
                 id="title"
@@ -27,6 +28,10 @@
             @error('title')
             <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
             @enderror
+        </div>
+        <div class="mb-4">
+            <label for="image" class="block text-gray-700 mb-2">Image</label>
+            <input type="file" name="image">
         </div>
         <div class="mb-4">
             <label for="content" class="block text-gray-700 mb-2">Content</label>

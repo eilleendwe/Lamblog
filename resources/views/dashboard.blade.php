@@ -22,6 +22,9 @@
                 @foreach ($posts as $post)
                 <div class="bg-white p-4 rounded-lg shadow-md mb-6">
                     <h2 class="text-xl font-semibold">{{ $post->title }}</h2>
+                    @if ($post->image)
+                    <img src="{{ asset('storage/' . $post->image) }}" alt="Post Image" class="w-full max-w-md rounded">
+                    @endif
                     @if ($post->content)
                     <p class="text-gray-600">{{ $post->content }}</p>
                     @endif

@@ -4,6 +4,9 @@
 
         <a href="{{ route('dashboard') }}" class="inline-block mb-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Back to Posts</a>
         <h2 class="text-2xl font-bold mb-4">{{ $post->title }}</h2>
+        @if ($post->image)
+        <img src="{{ asset('storage/' . $post->image) }}" alt="Post Image" class="w-full max-w-md rounded">
+        @endif
         <p class="text-gray-700 mb-4">{{ $post->content }}</p>
         <p class="text-sm text-gray-500 mb-6">Posted by {{ $post->user->name }} on {{ $post->created_at->format('d/m/Y - H.i') }}</p>
 

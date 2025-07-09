@@ -18,6 +18,7 @@ class PostController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'content' => 'required|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         $post = new Post();
@@ -25,6 +26,14 @@ class PostController extends Controller
         $post->name = Auth::user()->name; // Assuming the user is authenticated
         $post->title = $request->input('title');
         $post->content = $request->input('content');
+
+        // Handle image upload
+        // Handle image upload
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('posts', 'public');
+            $post->image = $imagePath;
+        }
+
         $post->save();
         return redirect()->back()->with('success', 'Post created successfully!');
     }
@@ -97,6 +106,8 @@ class PostController extends Controller
             return redirect()->back()->with('error', 'You have not liked this post yet.');
         }
     }
+
+
 
     /**
      * Display a listing of trending posts.
